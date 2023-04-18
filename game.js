@@ -76,9 +76,9 @@ const drawMenu = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Complete the 4 expressions",
+    labels["Complete the 4 expressions"],
     gameCanvas.width / 2 -
-      ctx.measureText("Complete the 4 expressions").width / 2,
+      ctx.measureText(labels["Complete the 4 expressions"]).width / 2,
     100
   );
 
@@ -93,8 +93,8 @@ const drawMenu = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Happy",
-    gameCanvas.width / 5 - ctx.measureText("Happy").width / 3,
+    labels["Happy"],
+    gameCanvas.width / 5 - ctx.measureText(labels["Happy"]).width / 3,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.happy) {
@@ -118,8 +118,8 @@ const drawMenu = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Sad",
-    (gameCanvas.width / 5) * 2 - ctx.measureText("Sad").width / 4,
+    labels["Sad"],
+    (gameCanvas.width / 5) * 2 - ctx.measureText(labels["Sad"]).width / 4,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.sad) {
@@ -143,8 +143,8 @@ const drawMenu = () => {
   ctx.fillStyle = "white";
   ctx.font = "25px Arial";
   ctx.fillText(
-    "Surprised",
-    (gameCanvas.width / 5) * 3 - ctx.measureText("Surprised").width / 3,
+    labels["Surprised"],
+    (gameCanvas.width / 5) * 3 - ctx.measureText(labels["Surprised"]).width / 3,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.surprised) {
@@ -168,8 +168,8 @@ const drawMenu = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Angry",
-    (gameCanvas.width / 5) * 4 - ctx.measureText("Angry").width / 4,
+    labels["Angry"],
+    (gameCanvas.width / 5) * 4 - ctx.measureText(labels["Angry"]).width / 4,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.angry) {
@@ -213,15 +213,15 @@ const draw = () => {
     gameCanvas.height / 2 - 130
   );
   ctx.fillText(
-    enemy.sentence,
-    gameCanvas.width / 2 - ctx.measureText(enemy.sentence).width / 2,
+    labels[enemy.sentence],
+    gameCanvas.width / 2 - ctx.measureText(labels[enemy.sentence]).width / 2,
     gameCanvas.height / 2 + 130
   );
 
   if (suspicious) {
     ctx.fillText(
-      "Alert",
-      gameCanvas.width / 2 - ctx.measureText("Alert").width / 2,
+      labels["Alert"],
+      gameCanvas.width / 2 - ctx.measureText(labels["Alert"]).width / 2,
       25
     );
   }
@@ -234,7 +234,7 @@ const draw = () => {
 
   ctx.fillStyle = colors.white;
   ctx.font = "30px Arial";
-  ctx.fillText("Happy", gameCanvas.width / 2 - 140, gameCanvas.height - 100);
+  ctx.fillText(labels["Happy"], gameCanvas.width / 2 - 140, gameCanvas.height - 100);
 
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
@@ -247,7 +247,7 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 - 200, gameCanvas.height - 130, 200, 40);
 
-  ctx.fillText("Sad", gameCanvas.width / 2 - 140, gameCanvas.height - 50);
+  ctx.fillText(labels["Sad"], gameCanvas.width / 2 - 140, gameCanvas.height - 50);
 
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
@@ -260,7 +260,7 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 - 200, gameCanvas.height - 82, 200, 40);
 
-  ctx.fillText("Angry", gameCanvas.width / 2 + 100, gameCanvas.height - 100);
+  ctx.fillText(labels["Angry"], gameCanvas.width / 2 + 100, gameCanvas.height - 100);
 
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
@@ -273,7 +273,7 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 + 45, gameCanvas.height - 130, 200, 40);
 
-  ctx.fillText("Surprised", gameCanvas.width / 2 + 100, gameCanvas.height - 50);
+  ctx.fillText(labels["Surprised"], gameCanvas.width / 2 + 100, gameCanvas.height - 50);
 
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
@@ -331,58 +331,58 @@ const drawMessages = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Thank you for participate on our Turing Test",
+    labels["Thank you for participate on our Turing Test"],
     gameCanvas.width / 2 -
-      ctx.measureText("Thank you for participate on our Turing Test").width / 2,
+      ctx.measureText(labels["Thank you for participate on our Turing Test"]).width / 2,
     100
   );
   ctx.fillText(
-    "You need to react acording to the sentences given",
+    labels["You need to react acording to the sentences given"],
     gameCanvas.width / 2 -
-      ctx.measureText("You need to react acording to the sentences given")
+      ctx.measureText(labels["You need to react acording to the sentences given"])
         .width /
         2,
     130
   );
   ctx.fillText(
-    "when the red bar finish",
+    labels["when the red bar finish"],
     gameCanvas.width / 2 -
-      ctx.measureText("when the red bar finish")
+      ctx.measureText(labels["when the red bar finish"])
         .width /
         2,
     160
   );
   ctx.fillText(
-    "You should be happy with supporting messages",
+    labels["You should be happy with supporting messages"],
     gameCanvas.width / 2 -
-      ctx.measureText("You should be happy with supporting messages").width / 2,
+      ctx.measureText(labels["You should be happy with supporting messages"]).width / 2,
     190
   );
   ctx.fillText(
-    "You should be sad with bad news",
+    labels["You should be sad with bad news"],
     gameCanvas.width / 2 -
-      ctx.measureText("You should be sad with bad news").width / 2,
+      ctx.measureText(labels["You should be sad with bad news"]).width / 2,
     220
   );
   ctx.fillText(
-    "You should be angry with insults (don't worry, they are light)",
+    labels["You should be angry with insults (don't worry, they are light)"],
     gameCanvas.width / 2 -
       ctx.measureText(
-        "You should be angry with insults (don't worry, they are light)"
+        labels["You should be angry with insults (don't worry, they are light)"]
       ).width /
         2,
     250
   );
   ctx.fillText(
-    "You should be surprise with any accusations",
+    labels["You should be surprise with any accusations"],
     gameCanvas.width / 2 -
-      ctx.measureText("You should be surprise with any accusations").width / 2,
+      ctx.measureText(labels["You should be surprise with any accusations"]).width / 2,
     280
   );
   ctx.fillText(
-    `The game will start in ${100 - timer}...`,
+    labels["The game will start in "] + (100 - timer).toString() + "...",
     gameCanvas.width / 2 -
-      ctx.measureText(`The game will start in ${100 - timer}...`).width / 2,
+      ctx.measureText(labels["The game will start in "] + (100 - timer).toString() + "...").width / 2,
     310
   );
 };
@@ -401,9 +401,9 @@ const drawOver = () => {
   );
 
   ctx.fillText(
-    "Complete the 4 expressions to go to the game",
+    labels["Complete the 4 expressions to go to the game"],
     gameCanvas.width / 2 -
-      ctx.measureText("Complete the 4 expressions to go to the game").width / 2,
+      ctx.measureText(labels["Complete the 4 expressions to go to the game"]).width / 2,
     130
   );
 
@@ -418,8 +418,8 @@ const drawOver = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Happy",
-    gameCanvas.width / 5 - ctx.measureText("Happy").width / 3,
+    labels["Happy"],
+    gameCanvas.width / 5 - ctx.measureText(labels["Happy"]).width / 3,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.happy) {
@@ -443,8 +443,8 @@ const drawOver = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Sad",
-    (gameCanvas.width / 5) * 2 - ctx.measureText("Sad").width / 4,
+    labels["Sad"],
+    (gameCanvas.width / 5) * 2 - ctx.measureText(labels["Sad"]).width / 4,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.sad) {
@@ -468,8 +468,8 @@ const drawOver = () => {
   ctx.fillStyle = "white";
   ctx.font = "25px Arial";
   ctx.fillText(
-    "Surprised",
-    (gameCanvas.width / 5) * 3 - ctx.measureText("Surprised").width / 3,
+    labels["Surprised"],
+    (gameCanvas.width / 5) * 3 - ctx.measureText(labels["Surprised"]).width / 3,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.surprised) {
@@ -493,8 +493,8 @@ const drawOver = () => {
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    "Angry",
-    (gameCanvas.width / 5) * 4 - ctx.measureText("Angry").width / 4,
+    labels["Angry"],
+    (gameCanvas.width / 5) * 4 - ctx.measureText(labels["Angry"]).width / 4,
     gameCanvas.height / 2 + 100
   );
   if (menuExpressions.angry) {

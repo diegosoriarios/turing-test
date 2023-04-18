@@ -3,11 +3,19 @@ const video = document.getElementById('video')
 const width = window.innerWidth / 2;
 const height = (560 / 720) * width;
 let response = {};
+let lang = navigator.languages[0].split("-")[0] === "pt" ? "pt" : "en";
+let labels = {};
 
 const getResponse = async () => {
   response = await fetch("./choses.json")
     .then((response) => response.json())
     .then((data) => data);
+}
+
+const getLabels = async () => {
+  labels = await fetch("./labels.json")
+    .then((response) => response.json())
+    .then((data) => data[lang])
 }
 
 Promise.all([
@@ -16,6 +24,7 @@ Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
   faceapi.nets.faceExpressionNet.loadFromUri('/models'),
   getResponse(),
+  getLabels(),
   initialize(),
 ]).then(startVideo)
 

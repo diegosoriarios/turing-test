@@ -345,16 +345,24 @@ const drawMessages = () => {
     130
   );
   ctx.fillText(
+    "when the red bar finish",
+    gameCanvas.width / 2 -
+      ctx.measureText("when the red bar finish")
+        .width /
+        2,
+    160
+  );
+  ctx.fillText(
     "You should be happy with supporting messages",
     gameCanvas.width / 2 -
       ctx.measureText("You should be happy with supporting messages").width / 2,
-    160
+    190
   );
   ctx.fillText(
     "You should be sad with bad news",
     gameCanvas.width / 2 -
       ctx.measureText("You should be sad with bad news").width / 2,
-    190
+    220
   );
   ctx.fillText(
     "You should be angry with insults (don't worry, they are light)",
@@ -363,19 +371,19 @@ const drawMessages = () => {
         "You should be angry with insults (don't worry, they are light)"
       ).width /
         2,
-    220
+    250
   );
   ctx.fillText(
     "You should be surprise with any accusations",
     gameCanvas.width / 2 -
       ctx.measureText("You should be surprise with any accusations").width / 2,
-    250
+    280
   );
   ctx.fillText(
     `The game will start in ${100 - timer}...`,
     gameCanvas.width / 2 -
       ctx.measureText(`The game will start in ${100 - timer}...`).width / 2,
-    280
+    310
   );
 };
 

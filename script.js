@@ -4,6 +4,7 @@ const width = window.innerWidth / 2;
 const height = (560 / 720) * width;
 let response = {};
 let lang = navigator.languages[0].split("-")[0] === "pt" ? "pt" : "en";
+let labelsJson = {};
 let labels = {};
 
 const getResponse = async () => {
@@ -13,9 +14,10 @@ const getResponse = async () => {
 }
 
 const getLabels = async () => {
-  labels = await fetch("./labels.json")
+  labelsJson = await fetch("./labels.json")
     .then((response) => response.json())
-    .then((data) => data[lang])
+    .then((data) => data);
+  labels = labelsJson[lang]; 
 }
 
 Promise.all([
@@ -60,20 +62,26 @@ video.addEventListener('play', () => {
     
     const action = update(expressions);
     
-    if (state === states.GAME || state === states.MENU) {
-      if (timer >= 100 && action === enemy.feeling) {
+    if (state === states.GAME) {
+      const isAngry = menuExpressions.angry === 4;
+      const isHappy = menuExpressions.happy === 4;
+      const isSad = menuExpressions.sad === 4;
+      const isSurprised = menuExpressions.surprised === 4;
+      const comparasionArray = [isAngry, isHappy, isSad, isSurprised];
+      comparasionArray.sort();
+      const isRepeated = comparasionArray[3] == comparasionArray [2];
+
+      console.log(menuExpressions[enemy.feeling]);
+      if (timer >= 100 && menuExpressions[enemy.feeling] === 4 && !isRepeated) {
         score++;
         generateEnemy();
         timer = 0;
         suspicious = false;
       }
-      else if (timer >= 100 && action != "" && action != enemy.feeling) {
+      else if (timer >= 100) {// && action != "" && action != enemy.feeling) {
         if (suspicious) {
           state = states.OVER;
-          menuExpressions.angry = false;
-          menuExpressions.happy = false;
-          menuExpressions.sad = false;
-          menuExpressions.surprised = false;
+          resetMenuExpressions();
         }
         suspicious = true;
         generateEnemy();
@@ -81,17 +89,30 @@ video.addEventListener('play', () => {
       }
     } else if (state === states.OVER) {
       if (
-        menuExpressions.angry &&
-        menuExpressions.happy &&
-        menuExpressions.sad &&
-        menuExpressions.surprised
+        menuExpressions.angry >= 1 &&
+        menuExpressions.happy >= 1 &&
+        menuExpressions.sad >= 1 &&
+        menuExpressions.surprised >= 1
       ) {
-        menuExpressions.angry = false;
-        menuExpressions.happy = false;
-        menuExpressions.sad = false;
-        menuExpressions.surprised = false;
+        resetMenuExpressions();
         timer = 0;
-        state = "GAME"
+        state = states.GAME
+      }
+    } else if (state === states.LANGUAGE) {
+      if (menuExpressions.happy >= 1) {
+        labels = labelsJson["pt"];
+        resetMenuExpressions();
+        state = states.MENU;
+      }
+      if (menuExpressions.sad >= 1) {
+        labels = labelsJson["en"];
+        resetMenuExpressions();
+        state = states.MENU;
+      }
+    } else if (state === states.MESSAGE) {
+      if (menuExpressions.happy >= 1 && menuExpressions.sad >= 1) {
+        timer = 0;
+        state = states.GAME;
       }
     }
 

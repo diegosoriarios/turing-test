@@ -4,6 +4,17 @@ const ctx = gameCanvas.getContext("2d");
 gameCanvas.width = window.innerWidth / 2;
 gameCanvas.height = (560 / 720) * gameCanvas.width;
 
+const MESSAGES_ARRAY = [
+  "Thank you for participate on our Turing Test",
+  "You need to react acording to the sentences given",
+  "when the red bar finish",
+  "You should be happy with supporting messages",
+  "You should be sad with bad news",
+  "You should be angry with insults (don't worry, they are light)",
+  "You should be surprise with any accusations",
+  "Be happy and sad to start the game"
+];
+
 const randomIntFromInterval = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -22,16 +33,21 @@ const initialize = () => {
 
 let enemy = {};
 let suspicious = false;
-let state = "MENU";
+let state = "LANGUAGE";
 
 const states = {
   MENU: "MENU",
   GAME: "GAME",
   MESSAGE: "MESSAGE",
   OVER: "OVER",
+  LANGUAGE: "LANGUAGE"
 };
 
 async function generateEnemy() {
+  menuExpressions.angry = 0;
+  menuExpressions.happy = 0;
+  menuExpressions.sad = 0;
+  menuExpressions.surprised = 0;
   const feelingList = ["happy", "sad", "angry", "surprised"];
   const random = randomIntFromInterval(1, 16);
   const feeling = feelingList[randomIntFromInterval(1, 4) - 1];
@@ -59,14 +75,23 @@ let messageWasRead = false;
 const colors = {
   black: "black",
   white: "white",
+  red: "#BE2633",
+  green: "#26BEB1",
 };
 
 const menuExpressions = {
-  happy: false,
-  sad: false,
-  surprised: false,
-  angry: false,
+  happy: 0,
+  sad: 0,
+  surprised: 0,
+  angry: 0,
 };
+
+const resetMenuExpressions = () => {
+  menuExpressions.angry = 0;
+  menuExpressions.happy = 0;
+  menuExpressions.sad = 0;
+  menuExpressions.surprised = 0;
+}
 
 const drawMenu = () => {
   ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -82,6 +107,13 @@ const drawMenu = () => {
     100
   );
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 5 - 45,
+    (gameCanvas.height / 2 - happyImage.height / 2 - 25 + 150) - (150 * menuExpressions.happy),
+    120,
+    (150 * menuExpressions.happy),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     happyImage,
@@ -97,7 +129,7 @@ const drawMenu = () => {
     gameCanvas.width / 5 - ctx.measureText(labels["Happy"]).width / 3,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.happy) {
+  if (menuExpressions.happy >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       gameCanvas.width / 5 - 45,
@@ -107,6 +139,13 @@ const drawMenu = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 2 - 45,
+    (gameCanvas.height / 2 - sadImage.height / 2 - 25 + 150) - (150 * menuExpressions.sad),
+    120,
+    (150 * menuExpressions.sad),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     sadImage,
@@ -122,7 +161,7 @@ const drawMenu = () => {
     (gameCanvas.width / 5) * 2 - ctx.measureText(labels["Sad"]).width / 4,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.sad) {
+  if (menuExpressions.sad >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 2 - 45,
@@ -132,6 +171,13 @@ const drawMenu = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 3 - 42,
+    (gameCanvas.height / 2 - surprisedImage.height / 2 - 25 + 150) - (150 * menuExpressions.surprised),
+    120,
+    (150 * menuExpressions.surprised),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     surprisedImage,
@@ -147,7 +193,7 @@ const drawMenu = () => {
     (gameCanvas.width / 5) * 3 - ctx.measureText(labels["Surprised"]).width / 3,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.surprised) {
+  if (menuExpressions.surprised >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 3 - 42,
@@ -157,6 +203,13 @@ const drawMenu = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 4 - 40,
+    (gameCanvas.height / 2 - angryImage.height / 2 - 25 + 150) - (150 * menuExpressions.angry),
+    120,
+    (150 * menuExpressions.angry),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     angryImage,
@@ -172,7 +225,7 @@ const drawMenu = () => {
     (gameCanvas.width / 5) * 4 - ctx.measureText(labels["Angry"]).width / 4,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.angry) {
+  if (menuExpressions.angry >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 4 - 40,
@@ -187,7 +240,7 @@ const draw = () => {
   // ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   ctx.fillStyle = colors.black;
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-  ctx.fillStyle = "red";
+  ctx.fillStyle = colors.red;
   ctx.fillRect(
     0,
     timer * (gameCanvas.height / 100),
@@ -232,6 +285,13 @@ const draw = () => {
     50
   );
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 2 - 200, 
+    gameCanvas.height - 130,
+    menuExpressions.happy * 50,
+    40,
+  );
   ctx.fillStyle = colors.white;
   ctx.font = "30px Arial";
   ctx.fillText(labels["Happy"], gameCanvas.width / 2 - 140, gameCanvas.height - 100);
@@ -247,8 +307,15 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 - 200, gameCanvas.height - 130, 200, 40);
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 2 - 200, 
+    gameCanvas.height - 82,
+    menuExpressions.sad * 50,
+    40,
+  );
+  ctx.fillStyle = "white";
   ctx.fillText(labels["Sad"], gameCanvas.width / 2 - 140, gameCanvas.height - 50);
-
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     sadImage,
@@ -260,8 +327,15 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 - 200, gameCanvas.height - 82, 200, 40);
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 2 + 45, 
+    gameCanvas.height - 130,
+    menuExpressions.angry * 50,
+    40,
+  );
+  ctx.fillStyle = "white";
   ctx.fillText(labels["Angry"], gameCanvas.width / 2 + 100, gameCanvas.height - 100);
-
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     angryImage,
@@ -273,8 +347,15 @@ const draw = () => {
   ctx.strokeStyle = colors.white;
   ctx.strokeRect(gameCanvas.width / 2 + 45, gameCanvas.height - 130, 200, 40);
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 2 + 45, 
+    gameCanvas.height - 82,
+    menuExpressions.surprised  * 50,
+    40,
+  );
+  ctx.fillStyle = "white";
   ctx.fillText(labels["Surprised"], gameCanvas.width / 2 + 100, gameCanvas.height - 50);
-
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     surprisedImage,
@@ -305,16 +386,15 @@ const takePlayerAction = (expression) => {
     surprised: "surprised",
     neutral: "",
   };
-  if (state === states.GAME) {
-    return playerActions[action];
-  }
 
-  menuExpressions[action] = true;
+  menuExpressions[action] += 0.1;
+  if (state !== "GAME" && menuExpressions[action] >= 1) menuExpressions[action] = 1;
+  if (state === "GAME" && menuExpressions[action] >= 4) menuExpressions[action] = 4;
   if (
-    menuExpressions.angry &&
-    menuExpressions.happy &&
-    menuExpressions.sad &&
-    menuExpressions.surprised &&
+    menuExpressions.angry >= 1 &&
+    menuExpressions.happy >= 1 &&
+    menuExpressions.sad >= 1 &&
+    menuExpressions.surprised >= 1 &&
     state === states.MENU
   ) {
     state = states.MESSAGE;
@@ -328,66 +408,84 @@ const drawMessages = () => {
   ctx.fillStyle = colors.black;
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+  MESSAGES_ARRAY.forEach((message, index) => {
+    ctx.fillStyle = "white";
+    ctx.font = "30px Arial";
+    ctx.fillText(
+      labels[message],
+      gameCanvas.width / 2 -
+        ctx.measureText(labels[message]).width / 2,
+      100 + (30 * index)
+    );
+  })
+  
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 2 - 45,
+    (gameCanvas.height / 2 - happyImage.height / 2 - 25 + 200) - (150 * menuExpressions.happy),
+    120,
+    (150 * menuExpressions.happy),
+  );
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    happyImage,
+    (gameCanvas.width / 5) * 2 - happyImage.width / 2,
+    gameCanvas.height / 2 + 50,
+    50,
+    50
+  );
   ctx.fillStyle = "white";
   ctx.font = "30px Arial";
   ctx.fillText(
-    labels["Thank you for participate on our Turing Test"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["Thank you for participate on our Turing Test"]).width / 2,
-    100
+    labels["Angry"],
+    (gameCanvas.width / 5) * 2 - ctx.measureText(labels["Angry"]).width / 4 - 6,
+    gameCanvas.height / 2 + 150
   );
+  if (menuExpressions.happy >= 1) {
+    ctx.strokeStyle = colors.white;
+    ctx.strokeRect(
+      (gameCanvas.width / 5) * 2 - 45,
+      gameCanvas.height / 2 - happyImage.height / 2 + 25,
+      120,
+      150
+    );
+  }
+
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 3 - 42,
+    (gameCanvas.height / 2 - sadImage.height / 2 - 25 + 200) - (150 * menuExpressions.sad),
+    120,
+    (150 * menuExpressions.sad),
+  );
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    sadImage,
+    (gameCanvas.width / 5) * 3 - sadImage.width / 2,
+    gameCanvas.height / 2 + 50,
+    50,
+    50
+  );
+  ctx.fillStyle = "white";
+  ctx.font = "25px Arial";
   ctx.fillText(
-    labels["You need to react acording to the sentences given"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["You need to react acording to the sentences given"])
-        .width /
-        2,
-    130
+    labels["Sad"],
+    (gameCanvas.width / 5) * 3 - ctx.measureText(labels["Sad"]).width / 4 + 6,
+    gameCanvas.height / 2 + 150
   );
-  ctx.fillText(
-    labels["when the red bar finish"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["when the red bar finish"])
-        .width /
-        2,
-    160
-  );
-  ctx.fillText(
-    labels["You should be happy with supporting messages"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["You should be happy with supporting messages"]).width / 2,
-    190
-  );
-  ctx.fillText(
-    labels["You should be sad with bad news"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["You should be sad with bad news"]).width / 2,
-    220
-  );
-  ctx.fillText(
-    labels["You should be angry with insults (don't worry, they are light)"],
-    gameCanvas.width / 2 -
-      ctx.measureText(
-        labels["You should be angry with insults (don't worry, they are light)"]
-      ).width /
-        2,
-    250
-  );
-  ctx.fillText(
-    labels["You should be surprise with any accusations"],
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["You should be surprise with any accusations"]).width / 2,
-    280
-  );
-  ctx.fillText(
-    labels["The game will start in "] + (100 - timer).toString() + "...",
-    gameCanvas.width / 2 -
-      ctx.measureText(labels["The game will start in "] + (100 - timer).toString() + "...").width / 2,
-    310
-  );
+  if (menuExpressions.sad >= 1) {
+    ctx.strokeStyle = colors.white;
+    ctx.strokeRect(
+      (gameCanvas.width / 5) * 3 - 42,
+      gameCanvas.height / 2 - sadImage.height / 2 + 25,
+      120,
+      150
+    );
+  }
 };
 
 const drawOver = () => {
+  menuExpressions.angry = 1;
   ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   ctx.fillStyle = colors.black;
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -407,6 +505,13 @@ const drawOver = () => {
     130
   );
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    gameCanvas.width / 5 - 45,
+    (gameCanvas.height / 2 - happyImage.height / 2 - 25 + 150) - (150 * menuExpressions.happy),
+    120,
+    (150 * menuExpressions.happy),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     happyImage,
@@ -422,7 +527,7 @@ const drawOver = () => {
     gameCanvas.width / 5 - ctx.measureText(labels["Happy"]).width / 3,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.happy) {
+  if (menuExpressions.happy >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       gameCanvas.width / 5 - 45,
@@ -432,6 +537,13 @@ const drawOver = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 2 - 45,
+    (gameCanvas.height / 2 - sadImage.height / 2 - 25 + 150) - (150 * menuExpressions.sad),
+    120,
+    (150 * menuExpressions.sad),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     sadImage,
@@ -447,7 +559,7 @@ const drawOver = () => {
     (gameCanvas.width / 5) * 2 - ctx.measureText(labels["Sad"]).width / 4,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.sad) {
+  if (menuExpressions.sad >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 2 - 45,
@@ -457,6 +569,13 @@ const drawOver = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 3 - 42,
+    (gameCanvas.height / 2 - surprisedImage.height / 2 - 25 + 150) - (150 * menuExpressions.surprised),
+    120,
+    (150 * menuExpressions.surprised),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     surprisedImage,
@@ -472,7 +591,7 @@ const drawOver = () => {
     (gameCanvas.width / 5) * 3 - ctx.measureText(labels["Surprised"]).width / 3,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.surprised) {
+  if (menuExpressions.surprised >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 3 - 42,
@@ -482,6 +601,13 @@ const drawOver = () => {
     );
   }
 
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 4 - 40,
+    (gameCanvas.height / 2 - angryImage.height / 2 - 25 + 150) - (150 * menuExpressions.angry),
+    120,
+    (150 * menuExpressions.angry),
+  );
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(
     angryImage,
@@ -497,11 +623,96 @@ const drawOver = () => {
     (gameCanvas.width / 5) * 4 - ctx.measureText(labels["Angry"]).width / 4,
     gameCanvas.height / 2 + 100
   );
-  if (menuExpressions.angry) {
+  if (menuExpressions.angry >= 1) {
     ctx.strokeStyle = colors.white;
     ctx.strokeRect(
       (gameCanvas.width / 5) * 4 - 40,
       gameCanvas.height / 2 - happyImage.height / 2 - 25,
+      120,
+      150
+    );
+  }
+};
+
+const drawLanguage = () => {
+  ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+  ctx.fillStyle = colors.black;
+  ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+  ctx.fillStyle = "white";
+  ctx.font = "30px Arial";
+  ctx.fillText(
+    "Be happy or sad to choose",
+    gameCanvas.width / 2 - ctx.measureText("Be happy or sad to choose").width / 2,
+    100
+  );
+
+  ctx.fillText(
+    labels["Choose your language"],
+    gameCanvas.width / 2 -
+      ctx.measureText(labels["Choose your language"]).width / 2,
+    130
+  );
+
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 2 - 45,
+    (gameCanvas.height / 2 - happyImage.height / 2 - 25 + 150) - (150 * menuExpressions.happy),
+    120,
+    (150 * menuExpressions.happy),
+  );
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    happyImage,
+    (gameCanvas.width / 5) * 2 - happyImage.width / 2,
+    gameCanvas.height / 2 - happyImage.height / 2,
+    50,
+    50
+  );
+  ctx.fillStyle = "white";
+  ctx.font = "18px Arial";
+  ctx.fillText(
+    "Portuguese",
+    (gameCanvas.width / 5) * 2 - ctx.measureText("Portuguese").width / 4 - 6,
+    gameCanvas.height / 2 + 100
+  );
+  if (menuExpressions.happy >= 1) {
+    ctx.strokeStyle = colors.white;
+    ctx.strokeRect(
+      (gameCanvas.width / 5) * 2 - 45,
+      gameCanvas.height / 2 - happyImage.height / 2 - 25,
+      120,
+      150
+    );
+  }
+
+  ctx.fillStyle = colors.green;
+  ctx.fillRect(
+    (gameCanvas.width / 5) * 3 - 42,
+    (gameCanvas.height / 2 - sadImage.height / 2 - 25 + 150) - (150 * menuExpressions.sad),
+    120,
+    (150 * menuExpressions.sad),
+  );
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    sadImage,
+    (gameCanvas.width / 5) * 3 - sadImage.width / 2,
+    gameCanvas.height / 2 - sadImage.height / 2,
+    50,
+    50
+  );
+  ctx.fillStyle = "white";
+  ctx.font = "25px Arial";
+  ctx.fillText(
+    "English",
+    (gameCanvas.width / 5) * 3 - ctx.measureText("English").width / 3,
+    gameCanvas.height / 2 + 100
+  );
+  if (menuExpressions.sad >= 1) {
+    ctx.strokeStyle = colors.white;
+    ctx.strokeRect(
+      (gameCanvas.width / 5) * 3 - 42,
+      gameCanvas.height / 2 - sadImage.height / 2 - 25,
       120,
       150
     );
@@ -518,10 +729,12 @@ const update = (expression) => {
       return takePlayerAction(expression);
     case states.MESSAGE:
       drawMessages();
-      if (timer >= 100) state = states.GAME;
-      break;
+      return takePlayerAction(expression);
     case states.OVER:
       drawOver();
+      return takePlayerAction(expression);
+    case states.LANGUAGE:
+      drawLanguage();
       return takePlayerAction(expression);
   }
 };

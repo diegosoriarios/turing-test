@@ -33,7 +33,7 @@ const initialize = () => {
 
 let enemy = {};
 let suspicious = false;
-let state = "LANGUAGE";
+let state = "GAME";
 
 const states = {
   MENU: "MENU",
@@ -91,6 +91,23 @@ const resetMenuExpressions = () => {
   menuExpressions.happy = 0;
   menuExpressions.sad = 0;
   menuExpressions.surprised = 0;
+}
+
+const handleWrong = () => {
+  if (suspicious) {
+    state = states.OVER;
+    resetMenuExpressions();
+  }
+  suspicious = true;
+  generateEnemy();
+  timer = 0;
+}
+
+const handleRight = () => {
+  score++;
+  generateEnemy();
+  timer = 0;
+  suspicious = false;
 }
 
 const drawMenu = () => {
@@ -485,7 +502,6 @@ const drawMessages = () => {
 };
 
 const drawOver = () => {
-  menuExpressions.angry = 1;
   ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
   ctx.fillStyle = colors.black;
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);

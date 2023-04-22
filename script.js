@@ -70,22 +70,15 @@ video.addEventListener('play', () => {
       const comparasionArray = [isAngry, isHappy, isSad, isSurprised];
       comparasionArray.sort();
       const isRepeated = comparasionArray[3] == comparasionArray [2];
-
-      console.log(menuExpressions[enemy.feeling]);
-      if (timer >= 100 && menuExpressions[enemy.feeling] === 4 && !isRepeated) {
-        score++;
-        generateEnemy();
-        timer = 0;
-        suspicious = false;
+      if (isAngry || isHappy || isSad || isSurprised) {
+        if (menuExpressions[enemy.feeling] === 4) {
+          handleRight();
+        } else {
+          handleWrong();
+        }
       }
       else if (timer >= 100) {// && action != "" && action != enemy.feeling) {
-        if (suspicious) {
-          state = states.OVER;
-          resetMenuExpressions();
-        }
-        suspicious = true;
-        generateEnemy();
-        timer = 0;
+        handleWrong()
       }
     } else if (state === states.OVER) {
       if (

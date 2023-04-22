@@ -7,7 +7,7 @@ gameCanvas.height = (560 / 720) * gameCanvas.width;
 const MESSAGES_ARRAY = [
   "Thank you for participate on our Turing Test",
   "You need to react acording to the sentences given",
-  "when the red bar finish",
+  "Be careful with the red bar",
   "You should be happy with supporting messages",
   "You should be sad with bad news",
   "You should be angry with insults (don't worry, they are light)",

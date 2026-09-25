@@ -33,7 +33,6 @@ const initialize = () => {
 
 let enemy = {};
 let suspicious = false;
-let state = "GAME";
 
 const states = {
   MENU: "MENU",
@@ -42,6 +41,9 @@ const states = {
   OVER: "OVER",
   LANGUAGE: "LANGUAGE"
 };
+
+// Start at the language select so the intro flow (language -> menu -> message) plays
+let state = states.LANGUAGE;
 
 async function generateEnemy() {
   menuExpressions.angry = 0;

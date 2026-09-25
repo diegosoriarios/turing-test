@@ -1,5 +1,26 @@
-# face-emotion-recognition
-Face emotion recognition game using TensorFlowJS
+# Turing Test
+
+Face emotion recognition game using TensorFlowJS — you are an AI trying to pass as human,
+reacting to NPCs with your own facial expressions, detected live through your webcam.
+
+## Play
+
+Requires **HTTPS or localhost** (camera access via `getUserMedia` is blocked on `file://`).
+
+```bash
+# any static server works
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
+
+Allow camera access when prompted, pick a language, calibrate your four expressions
+(happy, sad, angry, surprised) and start guessing.
+
+### How it works
+
+1. An NPC tells you something and feels a certain way about it
+2. You react with your face — the game reads your expression in real time
+3. React correctly to pass the Turing test; get it wrong twice and you're marked suspicious
 
 ## About Project
 Real time face detection through a webcam using AI. By using the Face API JS library built on Tensor Flow to setup the face detection.
